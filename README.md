@@ -1,14 +1,30 @@
-# Welcome to your CDK TypeScript project
+## 秘密鍵と公開鍵の生成
 
-This is a blank project for CDK development with TypeScript.
+```bash
+mkdir keys
+openssl genrsa -out keys/private.pem 2048
+openssl rsa -pubout -in keys/private.pem -out keys/public.pem
+```
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## CDKのデプロイ
 
-## Useful commands
+```bash
+npx cdk bootstrap
+npx cdk deploy --all
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
+# 全部破棄する場合
+npx cdk destroy --all
+```
+
+## 署名付きURL発行
+
+```bash
+# URL発行
+npx tsx getSignedUrl.ts
+
+# ファイルアップロード
+curl -X PUT \
+     -H "Content-Type: image/png" \
+     --data-binary "@example.png" \
+     "https://example.com/example.png?Expires=1737780542&Key-Pair-Id=XXXXX&Signature=......"
+```
